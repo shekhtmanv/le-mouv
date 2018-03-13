@@ -59,11 +59,8 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         return CGSize(width: frame.width, height: 200)
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         delegate?.didPressCell(sender: films![indexPath.row])
-
     }
     
     // Mark: Selector handlers
@@ -81,6 +78,7 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         filmEntity.rating = film.rating!
         filmEntity.title = film.title
         filmEntity.year = film.year
+        filmEntity.type = film.type
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
         print("saved film to core data")

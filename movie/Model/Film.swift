@@ -14,4 +14,5 @@ class Film: NSObject {
     var year: String?
     var overview: String?
     var posterName: String?
+    var type: String?
 }

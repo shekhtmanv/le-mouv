@@ -13,7 +13,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     let favoriteCellId = "favoriteCellId"
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var movies: [FilmEntity] = []
+    var films: [FilmEntity] = []
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -28,7 +28,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     
     func getMovieData() {
         do {
-            movies = try context.fetch(FilmEntity.fetchRequest())
+            films = try context.fetch(FilmEntity.fetchRequest())
         } catch {
             print("Fetching movies failed")
         }
@@ -47,13 +47,13 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     // Mark: CollectionView functions
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteCellId, for: indexPath) as? FavoriteCell else { return UICollectionViewCell() }
-        cell.movie = movies[indexPath.item]
+        cell.film = films[indexPath.item]
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        return films.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

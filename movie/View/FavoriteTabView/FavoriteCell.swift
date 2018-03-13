@@ -13,13 +13,14 @@ class FavoriteCell: BaseCell {
     var nameHeightConstraint: NSLayoutConstraint?
     
     // Mark: Setting cell with data here
-    var movie: FilmEntity? {
+    var film: FilmEntity? {
         didSet {
-            name.text = movie?.title
-            rating.text = movie?.rating.description
+            name.text = film?.title
+            rating.text = film?.rating.description
+            type.text = film?.type
             setupMoviePosterImage()
             setMovieTitleHeight()
-            if let releaseYear = movie?.year {
+            if let releaseYear = film?.year {
                 let releaseYearWithPrefix = String(releaseYear.prefix(4))
                 year.text = releaseYearWithPrefix
             }
@@ -31,6 +32,20 @@ class FavoriteCell: BaseCell {
         let view = UIView()
         view.backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
         return view
+    }()
+    
+    let type: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Helvetica", size: 17)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let typeLbl: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Helvetica-Bold", size: 17)
+        label.text = "Type:"
+        return label
     }()
     
     let year: UILabel = {
@@ -75,7 +90,7 @@ class FavoriteCell: BaseCell {
     
     func setMovieTitleHeight() {
         // measure title text height
-        if let title = movie?.title {
+        if let title = film?.title {
             let size = CGSize(width: frame.width - 130, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19)], context: nil)
@@ -89,7 +104,7 @@ class FavoriteCell: BaseCell {
     }
     
     func setupMoviePosterImage() {
-        if let posterImageUrl = movie?.posterName {
+        if let posterImageUrl = film?.posterName {
             guard let url = URL(string: posterImageUrl) else { return }
 
             if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
@@ -113,9 +128,9 @@ class FavoriteCell: BaseCell {
     }
     
     override func setupViews() {
-        addSubviewsToCellView(suchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView)
+        addSubviewsToCellView(suchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView, typeLbl, type)
         
-        addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]", views: name, movieRatingLbl, movieYearLbl)
+        addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]-6-[v3(30)]", views: name, movieRatingLbl, movieYearLbl, typeLbl)
         addConstraintsWithFormat(format: "V:|-20-[v0]-20-|", views: moviePosterImgView)
         addConstraintsWithFormat(format: "H:|-10-[v0(100)]-20-[v1]-10-|", views: moviePosterImgView, name)
         addConstraintsWithFormat(format: "V:[v0(30)]", views: rating)
@@ -131,6 +146,9 @@ class FavoriteCell: BaseCell {
         addConstraint(NSLayoutConstraint(item: rating, attribute: .centerY, relatedBy: .equal, toItem: movieRatingLbl, attribute: .centerY, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: year, attribute: .left, relatedBy: .equal, toItem: movieYearLbl, attribute: .right, multiplier: 1, constant: 10))
         addConstraint(NSLayoutConstraint(item: year, attribute: .centerY, relatedBy: .equal, toItem: movieYearLbl, attribute: .centerY, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: typeLbl, attribute: .left, relatedBy: .equal, toItem: movieYearLbl, attribute: .left, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: type, attribute: .centerY, relatedBy: .equal, toItem: typeLbl, attribute: .centerY, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: type, attribute: .left, relatedBy: .equal, toItem: typeLbl, attribute: .right, multiplier: 1, constant: 10))
     }
     
 }

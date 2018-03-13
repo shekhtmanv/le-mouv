@@ -28,6 +28,7 @@ class ApiService: NSObject {
                 film.rating = dictionary["vote_average"] as? Float
                 film.year = dictionary["release_date"] as? String
                 film.overview = dictionary["overview"] as? String
+                film.type = "Movie"
                 film.posterName = imageUrl
                 
                 films.append(film)
@@ -55,6 +56,7 @@ class ApiService: NSObject {
                 film.rating = dictionary["vote_average"] as? Float
                 film.year = dictionary["first_air_date"] as? String
                 film.overview = dictionary["overview"] as? String
+                film.type = "TV Show"
                 film.posterName = imageUrl
                 
                 films.append(film)

@@ -179,17 +179,18 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
     
     // Mark: #Selector handlers
     @objc func addToFavorite() {
-            // saving selectedFilm to core data
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let filmEntity = FilmEntity(context: context)
-            filmEntity.overview = selectedFilm.overview
-            filmEntity.posterName = selectedFilm.posterName
-            filmEntity.rating = selectedFilm.rating!
-            filmEntity.title = selectedFilm.title
-            filmEntity.year = selectedFilm.year
+        // saving selectedFilm to core data
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let filmEntity = FilmEntity(context: context)
+        filmEntity.overview = selectedFilm.overview
+        filmEntity.posterName = selectedFilm.posterName
+        filmEntity.rating = selectedFilm.rating!
+        filmEntity.title = selectedFilm.title
+        filmEntity.year = selectedFilm.year
+        filmEntity.type = selectedFilm.type
             
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            print("saved film to core data")
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        print("saved film to core data")
     }
     
     @objc func backButtonTapped() {
