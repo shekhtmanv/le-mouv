@@ -13,55 +13,55 @@ class ApiService: NSObject {
     
     static let sharedInstance = ApiService()
     
-    func retrieveMoviesJson(searchQuery: String, completion: @escaping ([Movie]) -> () ) {
+    func retrieveMoviesJson(searchQuery: String, completion: @escaping ([Film]) -> () ) {
         Alamofire.request(movieUrl(lookingForSearchQuery: searchQuery)).responseJSON { (response) in
             guard let json = response.result.value as? [String: AnyObject] else { return }
             guard let resultsArray = json["results"] as? [[String: AnyObject]] else { return }
             
-            var movies = [Movie]()
+            var films = [Film]()
             
             for dictionary in resultsArray {
-                let movie = Movie()
+                let film = Film()
                 let imageUrl = "http://image.tmdb.org/t/p/w185\(dictionary["poster_path"]!)"
                 
-                movie.title = dictionary["original_title"] as? String
-                movie.rating = dictionary["vote_average"] as? Float
-                movie.year = dictionary["release_date"] as? String
-                movie.overview = dictionary["overview"] as? String
-                movie.posterName = imageUrl
+                film.title = dictionary["original_title"] as? String
+                film.rating = dictionary["vote_average"] as? Float
+                film.year = dictionary["release_date"] as? String
+                film.overview = dictionary["overview"] as? String
+                film.posterName = imageUrl
                 
-                movies.append(movie)
+                films.append(film)
             }
             
             DispatchQueue.main.async {
-                completion(movies)
+                completion(films)
             }
             
         }
     }
     
-    func retrieveTvShowsJson(searchQuery: String, completion: @escaping ([Movie]) -> () ) {
+    func retrieveTvShowsJson(searchQuery: String, completion: @escaping ([Film]) -> () ) {
         Alamofire.request(tvShowUrl(lookingForSearchQuery: searchQuery)).responseJSON { (response) in
             guard let json = response.result.value as? [String: AnyObject] else { return }
             guard let resultsArray = json["results"] as? [[String: AnyObject]] else { return }
             
-            var movies = [Movie]()
+            var films = [Film]()
             
             for dictionary in resultsArray {
-                let movie = Movie()
+                let film = Film()
                 let imageUrl = "http://image.tmdb.org/t/p/w185\(dictionary["poster_path"]!)"
                 
-                movie.title = dictionary["name"] as? String
-                movie.rating = dictionary["vote_average"] as? Float
-                movie.year = dictionary["first_air_date"] as? String
-                movie.overview = dictionary["overview"] as? String
-                movie.posterName = imageUrl
+                film.title = dictionary["name"] as? String
+                film.rating = dictionary["vote_average"] as? Float
+                film.year = dictionary["first_air_date"] as? String
+                film.overview = dictionary["overview"] as? String
+                film.posterName = imageUrl
                 
-                movies.append(movie)
+                films.append(film)
             }
             
             DispatchQueue.main.async {
-                completion(movies)
+                completion(films)
             }
             
         }

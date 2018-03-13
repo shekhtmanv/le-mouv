@@ -12,12 +12,12 @@ class TvShowCell: BaseCell {
     
     var nameHeightConstraint: NSLayoutConstraint?
     
-    var movie: Movie? {
+    var film: Film? {
         didSet {
-            name.text = movie?.title
-            rating.text = movie?.rating?.description
+            name.text = film?.title
+            rating.text = film?.rating?.description
             setupPosterImage()
-            if let releaseYear = movie?.year {
+            if let releaseYear = film?.year {
                 let releaseYearWithPrefix = String(releaseYear.prefix(4))
                 year.text = releaseYearWithPrefix
             }
@@ -88,7 +88,7 @@ class TvShowCell: BaseCell {
     // Mark: Functions
     func setTitleHeight() {
         // measure title text height
-        if let title = movie?.title {
+        if let title = film?.title {
             let size = CGSize(width: frame.width - 130, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19)], context: nil)
@@ -102,7 +102,7 @@ class TvShowCell: BaseCell {
     }
 
     func setupPosterImage() {
-        if let posterImageUrl = movie?.posterName {
+        if let posterImageUrl = film?.posterName {
             guard let url = URL(string: posterImageUrl) else { return }
 
             if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {

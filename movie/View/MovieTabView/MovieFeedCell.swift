@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol MovieFeedCellDelegate {
-    func didPressMovieCell(sender: Any)
+protocol FilmCellDelegate {
+    func didPressCell(sender: Any)
 }
 
 class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    var delegate: MovieFeedCellDelegate?
-    var movies: [Movie]?
+    var delegate: FilmCellDelegate?
+    var films: [Film]?
     let cellId = "cellId"
     
     lazy var collectionView: UICollectionView = {
@@ -43,12 +43,12 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
     
     //  Mark: CollectionView functions
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies?.count ?? 0
+        return films?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as? MovieCell else { return UICollectionViewCell() }
-        cell.movie = movies?[indexPath.item]
+        cell.film = films?[indexPath.item]
         cell.addToFavoriteButton.isUserInteractionEnabled = true
         cell.addToFavoriteButton.addTarget(self, action: #selector(addToFavoriteBtnPressed(sender:)), for: .touchUpInside)
     
@@ -62,7 +62,7 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        delegate?.didPressMovieCell(sender: movies![indexPath.row])
+        delegate?.didPressCell(sender: films![indexPath.row])
 
     }
     
@@ -71,26 +71,26 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         guard let cell = sender.superview as? UICollectionViewCell else { return }
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         
-        let movie = movies![indexPath.item]
+        let film = films![indexPath.item]
         
-        // save selectedMovie to core data
+        // save selected film to core data
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let movieEntity = FilmEntity(context: context)
-        movieEntity.overview = movie.overview
-        movieEntity.posterName = movie.posterName
-        movieEntity.rating = movie.rating!
-        movieEntity.title = movie.title
-        movieEntity.year = movie.year
+        let filmEntity = FilmEntity(context: context)
+        filmEntity.overview = film.overview
+        filmEntity.posterName = film.posterName
+        filmEntity.rating = film.rating!
+        filmEntity.title = film.title
+        filmEntity.year = film.year
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        print("saved movie to core data")
+        print("saved film to core data")
     }
     
     @objc func fetchMovies(notification: NSNotification) {
         guard let searchQuery = notification.userInfo?["searchQuery"] as? String else { return }
         
-        ApiService.sharedInstance.retrieveMoviesJson(searchQuery: searchQuery) { (movies: [Movie]) in
-            self.movies = movies
+        ApiService.sharedInstance.retrieveMoviesJson(searchQuery: searchQuery) { (films: [Film]) in
+            self.films = films
             self.collectionView.reloadData()
         }
     }

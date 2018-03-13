@@ -8,14 +8,10 @@
 
 import UIKit
 
-protocol TVFeedCellDelegate {
-    func didPressTvShowCell(sender: Any)
-}
-
 class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    var delegate: TVFeedCellDelegate?
-    var movies: [Movie]?
+    var delegate: FilmCellDelegate?
+    var films: [Film]?
     let cellId = "cellId"
     
     lazy var collectionView: UICollectionView = {
@@ -43,8 +39,7 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
     // Mark: CollectionView functions
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? TvShowCell else { return UICollectionViewCell() }
-//        cell.movie = movies?[indexPath.item]
-        cell.movie = movies?[indexPath.item]
+        cell.film = films?[indexPath.item]
         cell.addToFavoriteButton.isUserInteractionEnabled = true
         cell.addToFavoriteButton.addTarget(self, action: #selector(addToFavoriteBtnPressed(sender:)), for: .touchUpInside)
         
@@ -52,7 +47,7 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies?.count ?? 0
+        return films?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -60,7 +55,7 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didPressTvShowCell(sender: movies![indexPath.row])
+        delegate?.didPressCell(sender: films![indexPath.row])
     }
     
     // Mark: Functions
@@ -71,25 +66,27 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
         guard let cell = sender.superview as? UICollectionViewCell else { return }
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         
-        let movie = movies![indexPath.item]
+        // save selected film to core data
+        let film = films![indexPath.item]
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let filmEntity = FilmEntity(context: context)
+        filmEntity.overview = film.overview
+        filmEntity.posterName = film.posterName
+        filmEntity.rating = film.rating!
+        filmEntity.title = film.title
+        filmEntity.year = film.year
+        
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        print("saved film to core data")
     }
     
     @objc func fetchTvShows(notification: NSNotification) {
         guard let searchQuery = notification.userInfo?["searchQuery"] as? String else { return }
         
-        ApiService.sharedInstance.retrieveTvShowsJson(searchQuery: searchQuery) { (movies: [Movie]) in
-            self.movies = movies
+        ApiService.sharedInstance.retrieveTvShowsJson(searchQuery: searchQuery) { (films: [Film]) in
+            self.films = films
             self.collectionView.reloadData()
         }
     }
 
 }
-
-
-
-
-
-
-
-
-

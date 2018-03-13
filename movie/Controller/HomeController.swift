@@ -9,9 +9,9 @@
 import UIKit
 import Alamofire
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, MovieFeedCellDelegate, TVFeedCellDelegate {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, FilmCellDelegate {
 
-    let showsDetailsViewController = ShowDetailsController()
+    let showDetailsViewController = ShowDetailsController()
     var searchView: UIView?
     var textField: UITextField?
     let cellId = "cellId"
@@ -98,16 +98,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     // Mark: Functions
-    func didPressTvShowCell(sender: Any) {
-        showsDetailsViewController.initTvShowData(tvShowFromCell: sender as! Movie)
+    func didPressCell(sender: Any) {
+        showDetailsViewController.initData(filmFromCell: sender as! Film)
         self.searchView?.removeFromSuperview()
-        self.navigationController?.pushViewController(showsDetailsViewController, animated: true)
-    }
-    
-    func didPressMovieCell(sender: Any) {
-        showsDetailsViewController.initMovieData(movieFromCell: sender as! Movie)
-        self.searchView?.removeFromSuperview()
-        self.navigationController?.pushViewController(showsDetailsViewController, animated: true)
+        self.navigationController?.pushViewController(showDetailsViewController, animated: true)
     }
     
     func scrollToMenuIndex(menuIndex: Int) {

@@ -12,7 +12,7 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
     
     // Mark: Constants, variables
     var nameHeightConstraint: NSLayoutConstraint?
-    var selectedMovie = Movie()
+    var selectedFilm = Film()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,45 +106,26 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
         return true
     }
     
-    func initMovieData(movieFromCell: Movie) {
-        self.selectedMovie = movieFromCell
+    func initData(filmFromCell: Film) {
+        self.selectedFilm = filmFromCell
         setupMovieDataFromSelectedCell()
     }
-    
-    func initTvShowData(tvShowFromCell: Movie) {
-        self.selectedMovie = tvShowFromCell
-        setupTvShowDataFromSelectedCell()
-    }
-    
-    func setupTvShowDataFromSelectedCell() {
-        name.text = selectedMovie.title
-        rating.text = selectedMovie.rating?.description
-        overview.text = selectedMovie.overview
-        setupTvShowPosterImage()
-        setTvShowTitleHeight()
-        
-        if let releaseYear = selectedMovie.year {
-            let releaseYearWithPrefix = String(releaseYear.prefix(4))
-            year.text = releaseYearWithPrefix
-        }
-        
-    }
-    
+
     func setupMovieDataFromSelectedCell() {
-        name.text = selectedMovie.title
-        rating.text = selectedMovie.rating?.description
-        overview.text = selectedMovie.overview
-        setupMoviePosterImage()
-        setMovieTitleHeight()
+        name.text = selectedFilm.title
+        rating.text = selectedFilm.rating?.description
+        overview.text = selectedFilm.overview
+        setupPosterImage()
+        setTitleHeight()
         
-        if let releaseYear = selectedMovie.year {
+        if let releaseYear = selectedFilm.year {
             let releaseYearWithPrefix = String(releaseYear.prefix(4))
             year.text = releaseYearWithPrefix
         }
     }
     
-    func setupTvShowPosterImage() {
-        if let posterImageUrl = selectedMovie.posterName {
+    func setupPosterImage() {
+        if let posterImageUrl = selectedFilm.posterName {
             guard let url = URL(string: posterImageUrl) else { return }
             
             if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
@@ -154,34 +135,8 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func setupMoviePosterImage() {
-        if let posterImageUrl = selectedMovie.posterName {
-            guard let url = URL(string: posterImageUrl) else { return }
-            
-            if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
-                self.posterImageView.image = imageFromCache
-                return
-            }
-        }
-    }
-    
-    func setTvShowTitleHeight() {
-        if let title = selectedMovie.title {
-            let size = CGSize(width: view.frame.width - 130, height: 1000)
-            let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-            let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19)], context: nil)
-            
-            if estimatedRect.size.height > 30 {
-                nameHeightConstraint?.constant = 50
-            } else {
-                nameHeightConstraint?.constant = 30
-            }
-            
-        }
-    }
-    
-    func setMovieTitleHeight() {
-        if let title = selectedMovie.title {
+    func setTitleHeight() {
+        if let title = selectedFilm.title {
             let size = CGSize(width: view.frame.width - 130, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19)], context: nil)
@@ -224,17 +179,17 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
     
     // Mark: #Selector handlers
     @objc func addToFavorite() {
-            // saving selectedMovie to core data
+            // saving selectedFilm to core data
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let movieEntity = FilmEntity(context: context)
-            movieEntity.overview = selectedMovie.overview
-            movieEntity.posterName = selectedMovie.posterName
-            movieEntity.rating = selectedMovie.rating!
-            movieEntity.title = selectedMovie.title
-            movieEntity.year = selectedMovie.year
+            let filmEntity = FilmEntity(context: context)
+            filmEntity.overview = selectedFilm.overview
+            filmEntity.posterName = selectedFilm.posterName
+            filmEntity.rating = selectedFilm.rating!
+            filmEntity.title = selectedFilm.title
+            filmEntity.year = selectedFilm.year
             
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            print("saved movie to core data")
+            print("saved film to core data")
     }
     
     @objc func backButtonTapped() {

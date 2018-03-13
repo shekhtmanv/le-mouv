@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Movie: NSObject {
+class Film: NSObject {
     var title: String?
     var rating: Float?
     var year: String?
