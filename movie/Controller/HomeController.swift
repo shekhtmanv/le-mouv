@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import CoreData
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, FilmCellDelegate {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, FilmCellDelegate, FavoriteCellDelegate {
 
     let showDetailsViewController = ShowDetailsController()
     var searchView: UIView?
@@ -17,7 +18,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let cellId = "cellId"
     let tvShowsCellId = "tvShowsCellId"
     let favoriteFeedCellId = "favoriteFeedCellId"
-    
     var trackedTab = 0
     
     lazy var menuBar: MenuBar = {
@@ -57,6 +57,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let indexPath = IndexPath(item: Int(index), section: 0)
 
         trackedTab = Int(index)
+        if trackedTab == 2 {
+            NotificationCenter.default.post(name: Notification.Name("FavoriteTabTapped"), object: nil)
+        }
         
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
     }
@@ -94,10 +97,22 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         // otherwise show third cell as FavoriteFeedCell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteFeedCellId, for: indexPath) as! FavoriteFeedCell
+        cell.delegate = self
         return cell
     }
     
     // Mark: Functions
+    func didPressFavoriteCell(sender: Any) {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context.delete(sender as! NSManagedObject)
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+        
+    }
+    
     func didPressCell(sender: Any) {
         showDetailsViewController.initData(filmFromCell: sender as! Film)
         self.searchView?.removeFromSuperview()

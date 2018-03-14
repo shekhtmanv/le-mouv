@@ -53,14 +53,10 @@ class MenuBar: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let x = CGFloat(indexPath.item) * frame.width / 3
-//        horizontalBarLeftAnchorConstraint?.constant = x
-//
-//        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-//            self.layoutIfNeeded()
-//        }, completion: nil)
+        if indexPath.item == 2 {
+            NotificationCenter.default.post(name: Notification.Name("FavoriteTabTapped"), object: nil)
+        }
         
-//        print(indexPath.item)
         homeController?.trackedTab = indexPath.item
         
         homeController?.scrollToMenuIndex(menuIndex: indexPath.item)

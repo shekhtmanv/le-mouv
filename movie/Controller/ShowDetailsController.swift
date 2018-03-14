@@ -188,8 +188,8 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
         filmEntity.title = selectedFilm.title
         filmEntity.year = selectedFilm.year
         filmEntity.type = selectedFilm.type
-            
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
         print("saved film to core data")
     }
     

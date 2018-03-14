@@ -79,8 +79,8 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         filmEntity.title = film.title
         filmEntity.year = film.year
         filmEntity.type = film.type
-        
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
         print("saved film to core data")
     }
     

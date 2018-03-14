@@ -8,9 +8,15 @@
 
 import UIKit
 
+protocol FavoriteCellDelegate {
+    func didPressFavoriteCell(sender: Any)
+}
+
 class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let favoriteCellId = "favoriteCellId"
+    
+    var delegate: FavoriteCellDelegate?
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var films: [FilmEntity] = []
@@ -35,7 +41,10 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     }
     
     override func setupViews() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData(notification:)), name: Notification.Name("FavoriteTabTapped"), object: nil)
+        
         getMovieData()
+        collectionView.reloadData()
         
         collectionView.register(FavoriteCell.self, forCellWithReuseIdentifier: favoriteCellId)
         
@@ -52,6 +61,10 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didPressFavoriteCell(sender: films[indexPath.row])
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return films.count
     }
@@ -60,4 +73,9 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
         return CGSize(width: frame.width, height: 200)
     }
     
+    // Mark: #Selector handlers
+    @objc func reloadData(notification: NSNotification) {
+        setupViews()
+        print(123)
+    }
 }
