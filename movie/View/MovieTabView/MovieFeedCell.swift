@@ -14,6 +14,9 @@ protocol FilmCellDelegate {
 
 class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var fetchedFilms: [FilmEntity] = []
+    
     var delegate: FilmCellDelegate?
     var films: [Film]?
     let cellId = "cellId"
@@ -61,6 +64,15 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate?.didPressCell(sender: films![indexPath.row])
+    }
+    
+    // Mark: Functions
+    func getMovieData() {
+        do {
+            fetchedFilms = try context.fetch(FilmEntity.fetchRequest())
+        } catch {
+            print("Fetching movies failed")
+        }
     }
     
     // Mark: Selector handlers

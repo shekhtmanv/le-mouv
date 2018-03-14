@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import CoreData
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, FilmCellDelegate, FavoriteCellDelegate {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, FilmCellDelegate {
 
     let showDetailsViewController = ShowDetailsController()
     var searchView: UIView?
@@ -97,22 +97,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         // otherwise show third cell as FavoriteFeedCell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteFeedCellId, for: indexPath) as! FavoriteFeedCell
-        cell.delegate = self
         return cell
     }
     
     // Mark: Functions
-    func didPressFavoriteCell(sender: Any) {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        context.delete(sender as! NSManagedObject)
-        do {
-            try context.save()
-        } catch {
-            print(error)
-        }
-        
-    }
-    
     func didPressCell(sender: Any) {
         showDetailsViewController.initData(filmFromCell: sender as! Film)
         self.searchView?.removeFromSuperview()

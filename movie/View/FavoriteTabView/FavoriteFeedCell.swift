@@ -8,15 +8,9 @@
 
 import UIKit
 
-protocol FavoriteCellDelegate {
-    func didPressFavoriteCell(sender: Any)
-}
-
 class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let favoriteCellId = "favoriteCellId"
-    
-    var delegate: FavoriteCellDelegate?
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var films: [FilmEntity] = []
@@ -32,7 +26,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
         return cv
     }()
     
-    func getMovieData() {
+    func getFilmData() {
         do {
             films = try context.fetch(FilmEntity.fetchRequest())
         } catch {
@@ -43,7 +37,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     override func setupViews() {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData(notification:)), name: Notification.Name("FavoriteTabTapped"), object: nil)
         
-        getMovieData()
+        getFilmData()
         collectionView.reloadData()
         
         collectionView.register(FavoriteCell.self, forCellWithReuseIdentifier: favoriteCellId)
@@ -64,11 +58,6 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        delegate?.didPressFavoriteCell(sender: films[indexPath.row])
-        print(321)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return films.count
     }
@@ -79,7 +68,21 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     
     // Mark: #Selector handlers
     @objc func deleteBtnPressed(sender: UIButton) {
-        print(sender)
+        guard let cell = sender.superview as? UICollectionViewCell else { return }
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        
+        let film = films[indexPath.item]
+
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context.delete(film)
+
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+        
+        setupViews()
     }
     
     @objc func reloadData(notification: NSNotification) {
