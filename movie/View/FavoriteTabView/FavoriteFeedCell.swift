@@ -8,8 +8,13 @@
 
 import UIKit
 
+protocol FavoriteFeedCellDelegate {
+    func didPressFavoriteCell(sender: Any)
+}
+
 class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    var delegate: FavoriteFeedCellDelegate?
     let favoriteCellId = "favoriteCellId"
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -56,6 +61,10 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
         cell.deleteButton.tag = indexPath.item
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didPressFavoriteCell(sender: films[indexPath.row])
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
