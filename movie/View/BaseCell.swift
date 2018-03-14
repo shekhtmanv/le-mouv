@@ -18,6 +18,12 @@ class BaseCell: UICollectionViewCell {
         
     }
     
+    func addSubviewsToView(addToView view: UIView, SuchSubViews views: UIView...) {
+        for i in views {
+            view.addSubview(i)
+        }
+    }
+    
     func addSubviewsToCellView(suchSubViews views: UIView...) {
         for i in views {
             addSubview(i)

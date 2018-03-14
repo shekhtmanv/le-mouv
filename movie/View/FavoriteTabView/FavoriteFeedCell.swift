@@ -57,12 +57,16 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteCellId, for: indexPath) as? FavoriteCell else { return UICollectionViewCell() }
         cell.film = films[indexPath.item]
+        cell.deleteButton.isUserInteractionEnabled = true
+        cell.deleteButton.addTarget(self, action: #selector(deleteBtnPressed(sender:)), for: .touchUpInside)
+        cell.deleteButton.tag = indexPath.item
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didPressFavoriteCell(sender: films[indexPath.row])
+//        delegate?.didPressFavoriteCell(sender: films[indexPath.row])
+        print(321)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -74,8 +78,11 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     }
     
     // Mark: #Selector handlers
+    @objc func deleteBtnPressed(sender: UIButton) {
+        print(sender)
+    }
+    
     @objc func reloadData(notification: NSNotification) {
         setupViews()
-        print(123)
     }
 }

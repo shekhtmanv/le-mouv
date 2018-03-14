@@ -34,6 +34,13 @@ class FavoriteCell: BaseCell {
         return view
     }()
     
+    let deleteButton: UIButton = {
+        let btn = UIButton()
+        let btnImage = UIImage(named: "cancel")
+        btn.setImage(btnImage, for: .normal)
+        return btn
+    }()
+    
     let type: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Helvetica", size: 17)
@@ -128,14 +135,16 @@ class FavoriteCell: BaseCell {
     }
     
     override func setupViews() {
-        addSubviewsToCellView(suchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView, typeLbl, type)
+        addSubviewsToView(addToView: self.contentView, SuchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView, typeLbl, type, deleteButton)
         
-        addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]-6-[v3(30)]", views: name, movieRatingLbl, movieYearLbl, typeLbl)
-        addConstraintsWithFormat(format: "V:|-20-[v0]-20-|", views: moviePosterImgView)
-        addConstraintsWithFormat(format: "H:|-10-[v0(100)]-20-[v1]-10-|", views: moviePosterImgView, name)
-        addConstraintsWithFormat(format: "V:[v0(30)]", views: rating)
-        addConstraintsWithFormat(format: "V:[v0(1)]|", views: seperatorView)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: seperatorView)
+        self.contentView.addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]-6-[v3(30)]", views: name, movieRatingLbl, movieYearLbl, typeLbl)
+        self.contentView.addConstraintsWithFormat(format: "V:|-20-[v0]-20-|", views: moviePosterImgView)
+        self.contentView.addConstraintsWithFormat(format: "H:|-10-[v0(100)]-20-[v1]-10-|", views: moviePosterImgView, name)
+        self.contentView.addConstraintsWithFormat(format: "V:[v0(30)]", views: rating)
+        self.contentView.addConstraintsWithFormat(format: "V:[v0(1)]|", views: seperatorView)
+        self.contentView.addConstraintsWithFormat(format: "H:|[v0]|", views: seperatorView)
+        self.contentView.addConstraintsWithFormat(format: "V:|-[v0(15)]", views: deleteButton)
+        self.contentView.addConstraintsWithFormat(format: "H:[v0(15)]-10-|", views: deleteButton)
         
         nameHeightConstraint = name.heightAnchor.constraint(equalToConstant: 30)
         nameHeightConstraint?.isActive = true
