@@ -12,7 +12,7 @@ class ShowFavoriteDetailsController: UIViewController, UIGestureRecognizerDelega
     
     // Mark: Constants, variables
     var nameHeightConstraint: NSLayoutConstraint?
-    var selectedFilm = FilmEntity()
+    var selectedFilm: FilmMO?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,27 +106,27 @@ class ShowFavoriteDetailsController: UIViewController, UIGestureRecognizerDelega
         return true
     }
     
-    func initData(filmFromCell: FilmEntity) {
+    func initData(filmFromCell: FilmMO) {
         self.selectedFilm = filmFromCell
         setupMovieDataFromSelectedCell()
     }
     
     func setupMovieDataFromSelectedCell() {
-        name.text = selectedFilm.title
-        rating.text = selectedFilm.rating.description
-        overview.text = selectedFilm.overview
-        type.text = selectedFilm.type
+        name.text = selectedFilm?.title
+        rating.text = selectedFilm?.rating.description
+        overview.text = selectedFilm?.overview
+        type.text = selectedFilm?.type
         setupPosterImage()
         setTitleHeight()
         
-        if let releaseYear = selectedFilm.year {
+        if let releaseYear = selectedFilm?.year {
             let releaseYearWithPrefix = String(releaseYear.prefix(4))
             year.text = releaseYearWithPrefix
         }
     }
     
     func setupPosterImage() {
-        if let posterImageUrl = selectedFilm.posterName {
+        if let posterImageUrl = selectedFilm?.posterName {
             guard let url = URL(string: posterImageUrl) else { return }
             
             if let imageFromCache = imageCache.object(forKey: url as AnyObject) as? UIImage {
@@ -137,7 +137,7 @@ class ShowFavoriteDetailsController: UIViewController, UIGestureRecognizerDelega
     }
     
     func setTitleHeight() {
-        if let title = selectedFilm.title {
+        if let title = selectedFilm?.title {
             let size = CGSize(width: view.frame.width - 130, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19)], context: nil)

@@ -72,7 +72,7 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         
         // save selected film to core data
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let filmEntity = FilmEntity(context: context)
+        let filmEntity = FilmMO(context: context)
         filmEntity.overview = film.overview
         filmEntity.posterName = film.posterName
         filmEntity.rating = film.rating!

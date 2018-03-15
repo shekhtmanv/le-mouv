@@ -116,7 +116,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     // Mark: Functions
     func didPressFavoriteCell(sender: Any) {
-        showFavoriteDetailViewController.initData(filmFromCell: sender as! FilmEntity)
+        showFavoriteDetailViewController.initData(filmFromCell: sender as! FilmMO)
         self.navigationController?.pushViewController(showFavoriteDetailViewController, animated: true)
     }
     

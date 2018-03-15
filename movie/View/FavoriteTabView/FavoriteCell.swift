@@ -13,11 +13,10 @@ class FavoriteCell: BaseCell {
     var nameHeightConstraint: NSLayoutConstraint?
     
     // Mark: Setting cell with data here
-    var film: FilmEntity? {
+    var film: FilmMO? {
         didSet {
             name.text = film?.title
             rating.text = film?.rating.description
-            type.text = film?.type
             setupMoviePosterImage()
             setMovieTitleHeight()
             if let releaseYear = film?.year {
@@ -36,23 +35,12 @@ class FavoriteCell: BaseCell {
     
     let deleteButton: UIButton = {
         let btn = UIButton()
-        let btnImage = UIImage(named: "cancel")
-        btn.setImage(btnImage, for: .normal)
+        btn.backgroundColor = UIColor.rgb(red: 248, green: 93, blue: 94)
+        btn.setTitle("Remove", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 17)
+        btn.layer.cornerRadius = 4
+        btn.clipsToBounds = true
         return btn
-    }()
-    
-    let type: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 17)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let typeLbl: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Helvetica-Bold", size: 17)
-        label.text = "Type:"
-        return label
     }()
     
     let year: UILabel = {
@@ -135,16 +123,15 @@ class FavoriteCell: BaseCell {
     }
     
     override func setupViews() {
-        addSubviewsToCellView(suchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView, typeLbl, type, deleteButton)
+        addSubviewsToCellView(suchSubViews: moviePosterImgView, name, movieRatingLbl, movieYearLbl, rating, year, seperatorView, deleteButton)
         
-        addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]-6-[v3(30)]", views: name, movieRatingLbl, movieYearLbl, typeLbl)
+        addConstraintsWithFormat(format: "V:|-20-[v0]-7-[v1(30)]-6-[v2(30)]-6-[v3(30)]", views: name, movieRatingLbl, movieYearLbl, deleteButton)
         addConstraintsWithFormat(format: "V:|-20-[v0]-20-|", views: moviePosterImgView)
         addConstraintsWithFormat(format: "H:|-10-[v0(100)]-20-[v1]-10-|", views: moviePosterImgView, name)
         addConstraintsWithFormat(format: "V:[v0(30)]", views: rating)
         addConstraintsWithFormat(format: "V:[v0(1)]|", views: seperatorView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: seperatorView)
-        addConstraintsWithFormat(format: "V:|-[v0(25)]", views: deleteButton)
-        addConstraintsWithFormat(format: "H:[v0(25)]-10-|", views: deleteButton)
+        addConstraintsWithFormat(format: "H:[v0(123)]", views: deleteButton)
         
         nameHeightConstraint = name.heightAnchor.constraint(equalToConstant: 30)
         nameHeightConstraint?.isActive = true
@@ -155,9 +142,7 @@ class FavoriteCell: BaseCell {
         addConstraint(NSLayoutConstraint(item: rating, attribute: .centerY, relatedBy: .equal, toItem: movieRatingLbl, attribute: .centerY, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: year, attribute: .left, relatedBy: .equal, toItem: movieYearLbl, attribute: .right, multiplier: 1, constant: 10))
         addConstraint(NSLayoutConstraint(item: year, attribute: .centerY, relatedBy: .equal, toItem: movieYearLbl, attribute: .centerY, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: typeLbl, attribute: .left, relatedBy: .equal, toItem: movieYearLbl, attribute: .left, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: type, attribute: .centerY, relatedBy: .equal, toItem: typeLbl, attribute: .centerY, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: type, attribute: .left, relatedBy: .equal, toItem: typeLbl, attribute: .right, multiplier: 1, constant: 10))
+        addConstraint(NSLayoutConstraint(item: deleteButton, attribute: .left, relatedBy: .equal, toItem: movieYearLbl, attribute: .left, multiplier: 1, constant: 0))
     }
     
 }

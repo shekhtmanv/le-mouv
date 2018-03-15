@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D102" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="FilmEntity" representedClassName="FilmEntity" syncable="YES" codeGenerationType="class">
+    <entity name="FilmEntity" representedClassName="FilmMO" syncable="YES" codeGenerationType="class">
         <attribute name="overview" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="posterName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>

@@ -18,7 +18,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     let favoriteCellId = "favoriteCellId"
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var films: [FilmEntity] = []
+    var films: [FilmMO] = []
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -32,7 +32,7 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     
     func getFilmData() {
         do {
-            films = try context.fetch(FilmEntity.fetchRequest())
+            films = try context.fetch(FilmMO.fetchRequest())
         } catch {
             print("Fetching movies failed")
         }

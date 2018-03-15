@@ -181,7 +181,7 @@ class ShowDetailsController: UIViewController, UIGestureRecognizerDelegate {
     @objc func addToFavorite() {
         // saving selectedFilm to core data
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let filmEntity = FilmEntity(context: context)
+        let filmEntity = FilmMO(context: context)
         filmEntity.overview = selectedFilm.overview
         filmEntity.posterName = selectedFilm.posterName
         filmEntity.rating = selectedFilm.rating!
