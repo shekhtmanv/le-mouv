@@ -26,8 +26,6 @@ class MovieFeedCell: BaseCell, UICollectionViewDataSource, UICollectionViewDeleg
         cv.backgroundColor = .white
         cv.delegate = self
         cv.dataSource = self
-        cv.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
-        cv.scrollIndicatorInsets = UIEdgeInsetsMake(30, 0, 0, 0)
         return cv
     }()
     

@@ -143,8 +143,8 @@ class FavoriteCell: BaseCell {
         addConstraintsWithFormat(format: "V:[v0(30)]", views: rating)
         addConstraintsWithFormat(format: "V:[v0(1)]|", views: seperatorView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: seperatorView)
-        addConstraintsWithFormat(format: "V:|-[v0(15)]", views: deleteButton)
-        addConstraintsWithFormat(format: "H:[v0(15)]-10-|", views: deleteButton)
+        addConstraintsWithFormat(format: "V:|-[v0(25)]", views: deleteButton)
+        addConstraintsWithFormat(format: "H:[v0(25)]-10-|", views: deleteButton)
         
         nameHeightConstraint = name.heightAnchor.constraint(equalToConstant: 30)
         nameHeightConstraint?.isActive = true

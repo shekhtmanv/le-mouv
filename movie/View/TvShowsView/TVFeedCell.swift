@@ -20,8 +20,6 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
         cv.backgroundColor = .white
         cv.dataSource = self
         cv.delegate = self
-        cv.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
-        cv.scrollIndicatorInsets = UIEdgeInsetsMake(30, 0, 0, 0)
         return cv
     }()
     

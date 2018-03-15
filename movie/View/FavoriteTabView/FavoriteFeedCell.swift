@@ -23,11 +23,10 @@ class FavoriteFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewData
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.showsVerticalScrollIndicator = false
         cv.dataSource = self
         cv.delegate = self
         cv.backgroundColor = .white
-        cv.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
-        cv.scrollIndicatorInsets = UIEdgeInsetsMake(30, 0, 0, 0)
         return cv
     }()
     

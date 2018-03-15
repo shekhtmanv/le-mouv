@@ -45,7 +45,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             flowLayout.minimumLineSpacing = 0
         }
         
-        collectionView?.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
+        collectionView?.showsVerticalScrollIndicator = false
+        collectionView?.showsHorizontalScrollIndicator = false
+        collectionView?.contentInset = UIEdgeInsetsMake(60, 0, 0, 0)
         collectionView?.isPagingEnabled = true
         collectionView?.backgroundColor = .white
         collectionView?.register(MovieFeedCell.self, forCellWithReuseIdentifier: cellId)
@@ -67,6 +69,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 3
+    }
+    
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -94,11 +100,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
             cell.delegate = self
             return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteFeedCellId, for: indexPath) as? FavoriteFeedCell else {
+                print("have problems when dequeuing FavoriteFeedCell")
+                return UICollectionViewCell()
+            }
+            cell.delegate = self
+            return cell
         }
-        
-        // otherwise show third cell as FavoriteFeedCell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: favoriteFeedCellId, for: indexPath) as! FavoriteFeedCell
-        cell.delegate = self
+    
+        let identifier: String
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
         return cell
     }
     
@@ -225,8 +237,25 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         self.searchView?.removeFromSuperview()
     }
     
+    lazy var settingsLauncher: SettingsLauncher = {
+        let launcher = SettingsLauncher()
+        launcher.homeController = self
+        return launcher
+    }()
+    
     @objc func handleMore() {
-        
+        settingsLauncher.homeController = self
+        settingsLauncher.showSettings()        
     }
+    
+    func showControllerForSetting(setting: Setting) {
+        let settingsViewController = UIViewController()
+        settingsViewController.view.backgroundColor = .white
+        settingsViewController.navigationItem.title = setting.name
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navigationController?.pushViewController(settingsViewController, animated: true)
+    }
+    
 }
 
