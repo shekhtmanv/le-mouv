@@ -23,6 +23,29 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
         return cv
     }()
     
+    let gifWebView: UIWebView = {
+        let webView = UIWebView()
+        webView.backgroundColor = .blue
+        let url = Bundle.main.url(forResource: "typing", withExtension: "gif")!
+        let data = try! Data(contentsOf: url)
+        webView.load(data, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: NSURL() as URL)
+        webView.scalesPageToFit = true
+        webView.contentMode = UIViewContentMode.scaleAspectFit
+        webView.layer.cornerRadius = 90
+        webView.isUserInteractionEnabled = false
+        webView.clipsToBounds = true
+        return webView
+    }()
+    
+    let greeetingsLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.text = "Tap on magnifying glass to look for favorite shows"
+        lbl.font = UIFont(name: "Helvetica-Bold", size: 18)
+        lbl.numberOfLines = 2
+        lbl.textAlignment = .center
+        return lbl
+    }()
+    
     override func setupViews() {
         super.setupViews()
         NotificationCenter.default.addObserver(self, selector: #selector(fetchTvShows), name: NSNotification.Name("SearchTvShows"), object: nil)
@@ -32,6 +55,18 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
         addSubview(collectionView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
+        
+        collectionView.addSubview(gifWebView)
+        collectionView.addConstraintsWithFormat(format: "H:[v0(180)]", views: gifWebView)
+        collectionView.addConstraintsWithFormat(format: "V:[v0(180)]", views: gifWebView)
+        collectionView.addConstraint(NSLayoutConstraint(item: gifWebView, attribute: .centerY, relatedBy: .equal, toItem: self.collectionView, attribute: .centerY, multiplier: 1, constant: -80))
+        collectionView.addConstraint(NSLayoutConstraint(item: gifWebView, attribute: .centerX, relatedBy: .equal, toItem: self.collectionView, attribute: .centerX, multiplier: 1, constant: 0))
+        
+        collectionView.addSubview(greeetingsLabel)
+        collectionView.addConstraintsWithFormat(format: "H:[v0(240)]", views: greeetingsLabel)
+        collectionView.addConstraintsWithFormat(format: "V:[v0(60)]", views: greeetingsLabel)
+        collectionView.addConstraint(NSLayoutConstraint(item: greeetingsLabel, attribute: .centerY, relatedBy: .equal, toItem: gifWebView, attribute: .centerY, multiplier: 1, constant: 150))
+        collectionView.addConstraint(NSLayoutConstraint(item: greeetingsLabel, attribute: .centerX, relatedBy: .equal, toItem: gifWebView, attribute: .centerX, multiplier: 1, constant: 0))
     }
     
     // Mark: CollectionView functions
@@ -80,6 +115,9 @@ class TVFeedCell: BaseCell, UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     @objc func fetchTvShows(notification: NSNotification) {
+        greeetingsLabel.isHidden = true
+        gifWebView.isHidden = true
+        
         guard let searchQuery = notification.userInfo?["searchQuery"] as? String else { return }
         
         ApiService.sharedInstance.retrieveTvShowsJson(searchQuery: searchQuery) { (films: [Film]) in

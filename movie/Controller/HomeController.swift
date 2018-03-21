@@ -219,17 +219,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func searchBtnWasTapped() {
-        
         // creating and posting notification with searchQuery
-        guard let searchQuery = textField?.text else { return }
-        let searchQueryDict: [String : String] = ["searchQuery" : searchQuery]
-
-        if trackedTab == 0 {
-            NotificationCenter.default.post(name: Notification.Name("SearchMovies"), object: nil, userInfo: searchQueryDict)
-        } else if trackedTab == 1 {
-            NotificationCenter.default.post(name: Notification.Name("SearchTvShows"), object: nil, userInfo: searchQueryDict)
+        if textField?.text != "" {
+            guard let searchQuery = textField?.text else { return }
+            let searchQueryDict: [String : String] = ["searchQuery" : searchQuery]
+            
+            if trackedTab == 0 {
+                NotificationCenter.default.post(name: Notification.Name("SearchMovies"), object: nil, userInfo: searchQueryDict)
+            } else if trackedTab == 1 {
+                NotificationCenter.default.post(name: Notification.Name("SearchTvShows"), object: nil, userInfo: searchQueryDict)
+            }
         }
-        
         self.searchView?.removeFromSuperview()
     }
     
