@@ -82,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				4F507725204AEFD200E418D3 /* BRADHITC.TTF */,
+				4FE3044F205EC10D00AAE7EA /* typing.gif */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -116,7 +117,6 @@
 		4F7FED0B2046E10400BD403F = {
 			isa = PBXGroup;
 			children = (
-				4FE3044F205EC10D00AAE7EA /* typing.gif */,
 				4F7FED162046E10400BD403F /* movie */,
 				4F7FED152046E10400BD403F /* Products */,
 				4F507724204AEECC00E418D3 /* Resources */,
